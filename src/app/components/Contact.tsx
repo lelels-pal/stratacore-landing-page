@@ -1,100 +1,113 @@
+import { useRef } from 'react';
 import contactBg from '../../imports/contactbg.png';
 import { MapPin, Mail, Facebook } from 'lucide-react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { StaggerReveal } from './animations/ScrollReveal';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
+
+gsap.registerPlugin(useGSAP);
 
 export function Contact() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const reduced = usePrefersReducedMotion();
+
+  useGSAP(
+    () => {
+      if (reduced) return;
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      tl.from('.contact-heading', { opacity: 0, y: 32, duration: 0.8 })
+        .from('.contact-subtext', { opacity: 0, y: 20, duration: 0.65 }, '-=0.45');
+    },
+    { scope: sectionRef, dependencies: [reduced] },
+  );
+
   return (
-    <section className="relative min-h-screen w-full flex flex-col">
-      {/* Contact-specific background — overrides the global fixed bg for this page */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
+    <section ref={sectionRef} className="relative flex min-h-[100dvh] w-full flex-col">
+      <div className="pointer-events-none fixed inset-0 z-0">
         <img
           src={contactBg}
           alt=""
-          className="w-full h-full object-cover object-center"
+          className="h-full w-full object-cover object-center"
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-[#05030F]/70" />
+        <div className="absolute inset-0 bg-[#05030F]/75" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-16 pt-40 pb-24">
-        <div className="max-w-[1100px] w-full mx-auto space-y-14">
-
-          {/* Header */}
-          <div className="text-center space-y-5">
-            <div className="inline-block px-4 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-sm text-violet-400 font-medium tracking-wide">
-              Contact Us
-            </div>
-            <h1 className="text-6xl font-bold tracking-tight leading-tight hyphens-none">
-              Let's Build the Future<br />
-              <span className="text-violet-400">of EV Charging Together</span>
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 pb-20 pt-28 md:px-8">
+        <div className="mx-auto w-full max-w-5xl space-y-12">
+          <div className="space-y-5 text-center">
+            <h1 className="contact-heading text-4xl font-bold leading-tight tracking-tight md:text-6xl">
+              Let&apos;s build the future
+              <span className="mt-1 block text-violet-400">of EV charging together</span>
             </h1>
-            <p className="text-lg text-white/50 max-w-xl mx-auto hyphens-none break-normal">
-              Have questions or ready to get started? Our team is here to help you power smarter, scale faster, and go further.
+            <p className="contact-subtext mx-auto max-w-xl text-lg text-white/50">
+              Have questions or ready to get started? Our team can help you power smarter,
+              scale faster, and go further.
             </p>
           </div>
 
-          {/* Cards row */}
-          <div className="grid grid-cols-3 gap-6">
-
-            {/* Get in Touch */}
-            <div className="rounded-3xl border border-violet-500/20 bg-violet-950/20 backdrop-blur-xl p-8 flex flex-col items-center text-center space-y-5"
-              style={{ boxShadow: '0 0 40px rgba(124,58,237,0.12)' }}>
-              <div className="size-16 rounded-2xl bg-violet-500/20 border border-violet-500/30 flex items-center justify-center"
-                style={{ boxShadow: '0 0 24px rgba(124,58,237,0.3)' }}>
-                <Mail className="size-8 text-violet-400" strokeWidth={1.5} />
+          <StaggerReveal className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <div
+              className="stagger-item flex flex-col items-center space-y-5 rounded-3xl border border-violet-500/20 bg-violet-950/20 p-8 text-center backdrop-blur-xl"
+              style={{ boxShadow: '0 0 40px rgba(124,58,237,0.12)' }}
+            >
+              <div className="flex size-16 items-center justify-center rounded-2xl border border-violet-500/30 bg-violet-500/20">
+                <Mail className="size-8 text-violet-300" strokeWidth={1.5} />
               </div>
               <div className="space-y-2">
                 <h3 className="text-xl font-semibold text-white">Get in Touch</h3>
-                <p className="text-sm text-white/50 leading-relaxed hyphens-none break-normal">
-                  Reach out to us through any of the channels below. We'd love to hear from you.
+                <p className="text-sm leading-relaxed text-white/50">
+                  Reach out through any channel below. We would love to hear from you.
                 </p>
               </div>
-              <div className="pt-2">
-                <a
-                  href="https://www.facebook.com/profile.php?id=61591692530471"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="size-10 rounded-xl bg-violet-500/10 border border-violet-500/20 hover:bg-violet-500/20 transition-colors flex items-center justify-center"
-                >
-                  <Facebook className="size-5 text-violet-400" />
-                </a>
-              </div>
+              <a
+                href="https://www.facebook.com/profile.php?id=61591692530471"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex size-10 items-center justify-center rounded-xl border border-violet-500/20 bg-violet-500/10 transition-colors hover:bg-violet-500/20"
+              >
+                <Facebook className="size-5 text-violet-300" />
+              </a>
             </div>
 
-            {/* Info cards — stacked */}
-            <div className="col-span-2 grid grid-rows-3 gap-4">
-
-              {/* Address */}
-              <div className="rounded-2xl border border-white/8 bg-white/4 backdrop-blur-xl px-6 py-5 flex items-start gap-4 hover:border-violet-500/25 transition-colors">
-                <div className="size-10 rounded-xl bg-violet-500/15 border border-violet-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                  <MapPin className="size-5 text-violet-400" strokeWidth={1.5} />
-                </div>
-                <div>
-                  <div className="text-xs text-white/40 uppercase tracking-wider mb-1">Address</div>
-                  <p className="text-sm text-white/80 leading-relaxed hyphens-none break-normal">
-                    55 Cauayan Street Barangay Limmara,<br />
-                    Vilage Project 7, Quezon City,<br />
-                    Philippines, 1105
-                  </p>
-                </div>
-              </div>
-
-              {/* Email */}
-              <div className="rounded-2xl border border-white/8 bg-white/4 backdrop-blur-xl px-6 py-5 flex items-start gap-4 hover:border-violet-500/25 transition-colors">
-                <div className="size-10 rounded-xl bg-violet-500/15 border border-violet-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                  <Mail className="size-5 text-violet-400" strokeWidth={1.5} />
-                </div>
-                <div>
-                  <div className="text-xs text-white/40 uppercase tracking-wider mb-1">Email</div>
-                  <a href="mailto:stratacoreceo@gmail.com" className="text-sm text-white/80 hover:text-violet-300 transition-colors">
-                    stratacoreceo@gmail.com
-                  </a>
+            <div className="space-y-4">
+              <div className="stagger-item rounded-2xl border border-white/8 bg-white/[0.04] px-6 py-5 backdrop-blur-xl transition-colors hover:border-violet-500/25">
+                <div className="flex items-start gap-4">
+                  <div className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl border border-violet-500/20 bg-violet-500/15">
+                    <MapPin className="size-5 text-violet-300" strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <div className="mb-1 text-xs uppercase tracking-wider text-white/40">Address</div>
+                    <p className="text-sm leading-relaxed text-white/80">
+                      55 Cauayan Street Barangay Limmara,
+                      <br />
+                      Vilage Project 7, Quezon City,
+                      <br />
+                      Philippines, 1105
+                    </p>
+                  </div>
                 </div>
               </div>
 
-
+              <div className="stagger-item rounded-2xl border border-white/8 bg-white/[0.04] px-6 py-5 backdrop-blur-xl transition-colors hover:border-violet-500/25">
+                <div className="flex items-start gap-4">
+                  <div className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl border border-violet-500/20 bg-violet-500/15">
+                    <Mail className="size-5 text-violet-300" strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <div className="mb-1 text-xs uppercase tracking-wider text-white/40">Email</div>
+                    <a
+                      href="mailto:stratacoreceo@gmail.com"
+                      className="text-sm text-white/80 transition-colors hover:text-violet-300"
+                    >
+                      stratacoreceo@gmail.com
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          </StaggerReveal>
         </div>
       </div>
     </section>

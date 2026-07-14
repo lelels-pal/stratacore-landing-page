@@ -1,58 +1,48 @@
 import { ArrowRight } from 'lucide-react';
+import { ScrollReveal } from './animations/ScrollReveal';
 
 export function EnterpriseCTA({ onContact }: { onContact: () => void }) {
   return (
-    <section className="relative py-32 px-16">
-      <div className="max-w-[1440px] mx-auto">
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#F97316]/20 via-[#F97316]/5 to-[#F97316]/20 blur-3xl opacity-30" />
-        
-        <div className="relative rounded-3xl border border-[#F97316]/30 bg-gradient-to-br from-[#F97316]/10 via-transparent to-transparent backdrop-blur-xl overflow-hidden">
-          {/* Glow Effect */}
-          <div className="absolute -top-40 -right-40 size-96 bg-[#F97316]/20 rounded-full blur-3xl" />
-          <div className="absolute -bottom-40 -left-40 size-96 bg-[#F97316]/10 rounded-full blur-3xl" />
-          
-          <div className="relative px-20 py-24 text-center space-y-8">
-            <div className="space-y-6 max-w-3xl mx-auto">
-              <h2 className="text-5xl font-semibold tracking-tight leading-tight">
-                Ready to transform your EV charging infrastructure?
-              </h2>
-              <p className="text-xl text-white/60 leading-relaxed">
-                Join leading enterprises worldwide in delivering exceptional charging experiences. Schedule a personalized demo with our team.
-              </p>
-            </div>
+    <section className="relative px-4 py-24 md:px-8 md:py-28 lg:px-12">
+      <div className="mx-auto max-w-7xl">
+        <ScrollReveal>
+          <div className="relative overflow-hidden rounded-3xl border border-violet-500/25 bg-gradient-to-br from-violet-600/15 via-[#09090B]/40 to-transparent p-10 md:p-16">
+            <div className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-violet-500/20 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-24 -left-24 size-72 rounded-full bg-violet-600/10 blur-3xl" />
 
-            <div className="flex items-center justify-center pt-4">
-              <button onClick={onContact} className="group px-8 py-4 rounded-full bg-[#F97316] hover:bg-[#EA580C] transition-all duration-300 flex items-center gap-3 shadow-2xl shadow-[#F97316]/40">
-                <span className="font-medium">Get Started Today</span>
-                <ArrowRight className="size-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
+            <div className="relative mx-auto max-w-3xl space-y-8 text-center">
+              <div className="space-y-5">
+                <h2 className="text-3xl font-semibold leading-tight tracking-tight md:text-5xl">
+                  Ready to transform your EV charging infrastructure?
+                </h2>
+                <p className="text-lg leading-relaxed text-white/60 md:text-xl">
+                  Schedule a personalized demo and see how Stratacore helps teams
+                  deploy faster and operate with confidence.
+                </p>
+              </div>
 
-            {/* Trust Indicators */}
-            <div className="pt-12 flex items-center justify-center gap-12 text-sm text-white/50">
-              {['Fast Deployment', 'Cloud or On-Premise', 'Built for Scale'].map((label, i) => (
-                <div key={label} className="flex items-center gap-2.5">
-                  {i > 0 && <div className="h-4 w-px bg-white/10 -ml-6 mr-3" />}
-                  <svg
-                    className="size-5 shrink-0"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#F97316"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    style={{ filter: 'drop-shadow(0 0 6px rgba(249,115,22,0.6))' }}
-                  >
-                    <circle cx="12" cy="12" r="9" />
-                    <path d="M8.5 12.5l2.5 2.5 4.5-5" />
-                  </svg>
-                  <span>{label}</span>
-                </div>
-              ))}
+              <div className="flex justify-center pt-2">
+                <button
+                  type="button"
+                  onClick={onContact}
+                  className="group flex items-center gap-3 rounded-full bg-violet-600 px-8 py-4 font-medium text-white shadow-xl shadow-violet-600/30 transition-all duration-300 hover:bg-violet-500 active:scale-[0.98]"
+                >
+                  Book Demo
+                  <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
+                </button>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 pt-6 text-sm text-white/50">
+                {['Fast Deployment', 'Cloud or On-Premise', 'Built for Scale'].map((label) => (
+                  <span key={label} className="flex items-center gap-2">
+                    <span className="size-1.5 rounded-full bg-violet-400" />
+                    {label}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

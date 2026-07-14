@@ -6,6 +6,7 @@ import { Benefits } from './components/Benefits';
 import { EnterpriseCTA } from './components/EnterpriseCTA';
 import { Navigation } from './components/Navigation';
 import { Contact } from './components/Contact';
+import { Footer } from './components/Footer';
 import bgImage from '../imports/bg_for_landingpage.png';
 
 export type Page = 'home' | 'contact';
@@ -14,7 +15,6 @@ export default function App() {
   const [page, setPage] = useState<Page>('home');
   const [scrollTarget, setScrollTarget] = useState<string | null>(null);
 
-  // After switching to home, scroll to the pending target section
   useEffect(() => {
     if (scrollTarget && page === 'home') {
       const timer = setTimeout(() => {
@@ -37,11 +37,11 @@ export default function App() {
   return (
     <>
       {page === 'home' && (
-        <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="pointer-events-none fixed inset-0 z-0">
           <img
             src={bgImage}
             alt=""
-            className="w-full h-full object-cover object-center"
+            className="h-full w-full object-cover object-center"
             aria-hidden="true"
           />
           <div className="absolute inset-0 bg-[#09090B]/72" />
@@ -49,18 +49,32 @@ export default function App() {
       )}
 
       <div className="relative z-10 min-h-screen text-white">
-        <Navigation page={page} onNavigate={setPage} onNavigateToSection={navigateToSection} />
+        <Navigation
+          page={page}
+          onNavigate={setPage}
+          onNavigateToSection={navigateToSection}
+        />
 
         {page === 'home' ? (
           <>
-            <Hero onExplore={() => navigateToSection('benefits')} />
+            <Hero onExplore={() => navigateToSection('features')} />
             <Features />
             <DashboardPreview />
             <Benefits />
             <EnterpriseCTA onContact={() => setPage('contact')} />
+            <Footer
+              onNavigateToSection={navigateToSection}
+              onContact={() => setPage('contact')}
+            />
           </>
         ) : (
-          <Contact />
+          <>
+            <Contact />
+            <Footer
+              onNavigateToSection={navigateToSection}
+              onContact={() => setPage('contact')}
+            />
+          </>
         )}
       </div>
     </>

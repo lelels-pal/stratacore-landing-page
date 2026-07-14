@@ -1,89 +1,88 @@
-import { ArrowRight, Play } from 'lucide-react';
+import { useRef } from 'react';
+import { Play } from 'lucide-react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import heroVideo from '../../imports/enhanced_stratabg.mp4';
+import { CapabilityStrip } from './CapabilityStrip';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
+
+gsap.registerPlugin(useGSAP);
 
 export function Hero({ onExplore }: { onExplore: () => void }) {
+  const containerRef = useRef<HTMLElement>(null);
+  const reduced = usePrefersReducedMotion();
+
+  useGSAP(
+    () => {
+      if (reduced) return;
+
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      tl.from('.hero-badge', { opacity: 0, y: 18, duration: 0.55 })
+        .from('.hero-headline', { opacity: 0, y: 44, duration: 0.85 }, '-=0.25')
+        .from('.hero-subtext', { opacity: 0, y: 24, duration: 0.65 }, '-=0.45')
+        .from('.hero-cta', { opacity: 0, y: 20, duration: 0.55 }, '-=0.35')
+        .from('.hero-glow', { opacity: 0, scale: 0.92, duration: 1.1 }, '-=0.7')
+        .from('.hero-capabilities', { opacity: 0, y: 16, duration: 0.6 }, '-=0.4');
+    },
+    { scope: containerRef, dependencies: [reduced] },
+  );
+
   return (
-    <section className="relative h-screen w-full overflow-hidden">
-      {/* Video Background */}
+    <section
+      ref={containerRef}
+      className="relative flex min-h-[100dvh] w-full flex-col overflow-hidden"
+    >
       <div className="absolute inset-0">
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover"
         >
           <source src={heroVideo} type="video/mp4" />
         </video>
-        {/* Dark overlay for readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#09090B]/50 via-[#09090B]/55 to-[#09090B]/80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#09090B]/90 via-[#09090B]/65 to-[#09090B]/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#09090B]/55 via-transparent to-[#09090B]/30" />
       </div>
 
-      {/* Content */}
-      <div className="relative h-full max-w-[1440px] mx-auto px-16 flex flex-col justify-center">
-        <div className="max-w-4xl space-y-8">
-          {/* Headline */}
-          <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#F97316]/30 bg-[#F97316]/10 backdrop-blur-sm">
-              <div className="size-1.5 rounded-full bg-[#F97316] animate-pulse" />
-              <span className="text-sm text-[#F97316]">Next-Generation EV Infrastructure</span>
+      <div className="hero-glow pointer-events-none absolute -right-32 top-1/4 size-[520px] rounded-full bg-violet-600/20 blur-[120px]" />
+
+      <div className="relative flex min-h-[100dvh] w-full flex-1 flex-col">
+        <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pb-6 pt-24 md:px-8 lg:px-12">
+          <div className="max-w-2xl space-y-6">
+            <div className="hero-badge inline-flex items-center rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 backdrop-blur-sm">
+              <span className="text-sm font-medium text-violet-300">
+                EV Infrastructure Platform
+              </span>
             </div>
-            
-            <h1 className="text-7xl font-semibold tracking-tight leading-[1.1]">
-              Power the Future of
-              <br />
-              <span className="bg-gradient-to-r from-white via-white to-white/60 bg-clip-text text-transparent">
-                Electric Mobility
+
+            <h1 className="hero-headline text-4xl font-semibold leading-[1.08] tracking-tight md:text-5xl lg:text-6xl">
+              Power the future of
+              <span className="mt-1 block bg-gradient-to-r from-white via-violet-100 to-violet-300/80 bg-clip-text text-transparent">
+                electric mobility
               </span>
             </h1>
-          </div>
 
-          {/* Description */}
-          <p className="text-xl text-white/60 max-w-2xl leading-relaxed">
-            Enterprise-grade charging infrastructure software that scales with your vision.
-            Manage networks, optimize energy, and deliver seamless experiences.
-          </p>
+            <p className="hero-subtext max-w-xl text-lg leading-relaxed text-white/70 md:text-xl">
+              Enterprise charging software to manage networks, optimize energy,
+              and deliver reliable driver experiences at scale.
+            </p>
 
-          {/* CTAs */}
-          <div className="flex items-center pt-4">
-            <button
-              onClick={onExplore}
-              className="group px-8 py-4 rounded-full border border-[#F97316]/25 backdrop-blur-sm bg-[#F97316]/5 hover:bg-[#F97316]/10 transition-all duration-300 flex items-center gap-3"
-              style={{ boxShadow: '0 0 20px rgba(249, 115, 22, 0.15), 0 2px 8px rgba(249, 115, 22, 0.1)' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 32px rgba(249, 115, 22, 0.3), 0 4px 12px rgba(249, 115, 22, 0.2)'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px rgba(249, 115, 22, 0.15), 0 2px 8px rgba(249, 115, 22, 0.1)'; }}
-            >
-              <Play className="size-5 text-[#F97316]" fill="#F97316" />
-              <span className="font-medium text-white">Explore Platform</span>
-            </button>
-          </div>
-
-          {/* Capability Cards */}
-          <div className="flex items-start gap-0 pt-12">
-            <div className="space-y-2 pr-12">
-              <div className="text-base font-semibold text-white leading-snug">Flexible Deployment</div>
-              <div className="text-sm text-white/50 leading-relaxed max-w-[200px]">Deploy on-premise or in the cloud.</div>
-            </div>
-            <div className="self-stretch w-px bg-white/10 mx-0 shrink-0" />
-            <div className="space-y-2 px-12">
-              <div className="text-base font-semibold text-white leading-snug">Enterprise Security</div>
-              <div className="text-sm text-white/50 leading-relaxed max-w-[200px]">Secure authentication and reliable operations.</div>
-            </div>
-            <div className="self-stretch w-px bg-white/10 mx-0 shrink-0" />
-            <div className="space-y-2 pl-12">
-              <div className="text-base font-semibold text-white leading-snug">Real-Time Monitoring</div>
-              <div className="text-sm text-white/50 leading-relaxed max-w-[200px]">Live insights and remote management.</div>
+            <div className="hero-cta flex flex-wrap items-center gap-4 pt-1">
+              <button
+                type="button"
+                onClick={onExplore}
+                className="group flex items-center gap-3 rounded-full bg-violet-600 px-8 py-4 font-medium text-white shadow-lg shadow-violet-600/30 transition-all duration-300 hover:bg-violet-500 active:scale-[0.98]"
+              >
+                <Play className="size-5 fill-white text-white" />
+                Explore Platform
+              </button>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Scroll Indicator — pinned to bottom-right, clear of all content */}
-      <div className="absolute bottom-10 right-16 flex flex-col items-center gap-3 animate-bounce">
-        <span className="text-xs text-white/40 uppercase tracking-wider">Scroll to explore</span>
-        <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
-          <div className="w-1 h-2 rounded-full bg-white/40" />
-        </div>
+        <CapabilityStrip embedded />
       </div>
     </section>
   );
